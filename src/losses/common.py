@@ -1,7 +1,3 @@
-'''
-BasicSR Project
-Code Reference: https://github.com/XPixelGroup/BasicSR
-'''
 from torch import nn as nn
 from torch.nn import functional as F
 
