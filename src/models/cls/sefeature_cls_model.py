@@ -121,7 +121,6 @@ class SEfeatureClassificationModel(BaseModel):
         
         # set up saving directories
         os.makedirs(os.path.join(self.exp_dir, 'models'), exist_ok=True)
-        os.makedirs(os.path.join(self.exp_dir, 'checkpoints'), exist_ok=True)
         
         # eval freq
         self.eval_freq = train_opt.get('eval_freq', 1)
@@ -209,7 +208,7 @@ class SEfeatureClassificationModel(BaseModel):
             self.schedulers[1].step()
         return
 
-    @torch.inference_mode()            
+    @torch.inference_mode()
     def evaluate(self, data_loader_test, epoch=0):
         if hasattr(self, 'eval_freq') and (epoch % self.eval_freq != 0):
             return
@@ -233,7 +232,7 @@ class SEfeatureClassificationModel(BaseModel):
             # evaluation on validation batch
             batch_size = img_hr.shape[0]
             psnr, valid_batch_size = calculate_psnr_batch(quantize(img_sr), img_hr)
-            metric_logger.meters["psnr"].update(psnr.item(), n=valid_batch_size)                
+            metric_logger.meters["psnr"].update(psnr.item(), n=valid_batch_size)
             if self.opt['test'].get('calculate_lpips', False):
                 lpips, valid_batch_size = calculate_lpips_batch(quantize(img_sr), img_hr, self.net_lpips)
                 metric_logger.meters["lpips"].update(lpips.item(), n=valid_batch_size)
@@ -268,22 +267,11 @@ class SEfeatureClassificationModel(BaseModel):
 
         return
 
-    def save(self, epoch):            
-        checkpoint = {"epoch": epoch,
-                      "opt": self.opt,
-                      "net_sr": self.get_bare_model(self.net_sr).state_dict(),
-                      "net_cls": self.get_bare_model(self.net_cls).state_dict(),
-                      'schedulers': [],
-                      }
-        for s in self.schedulers:
-            checkpoint['schedulers'].append(s.state_dict())
-                
+    def save(self, epoch):
         if epoch % self.opt['train']['save_freq'] == 0:
             save_on_master(self.get_bare_model(self.net_sr).state_dict(), os.path.join(self.exp_dir, 'models', "net_sr_{:03d}.pth".format(epoch)))
             save_on_master(self.get_bare_model(self.net_cls).state_dict(), os.path.join(self.exp_dir, 'models', "net_cls_{:03d}.pth".format(epoch)))
-            save_on_master(checkpoint, os.path.join(self.exp_dir, 'checkpoints', "checkpoint_{:03d}.pth".format(epoch)))
             
         save_on_master(self.get_bare_model(self.net_sr).state_dict(), os.path.join(self.exp_dir, 'models', "net_sr_latest.pth"))
         save_on_master(self.get_bare_model(self.net_cls).state_dict(), os.path.join(self.exp_dir, 'models', "net_cls_latest.pth"))
-        save_on_master(checkpoint, os.path.join(self.exp_dir, 'checkpoints', "checkpoint_latest.pth"))
         return
