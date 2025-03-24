@@ -1,7 +1,3 @@
-'''
-BasicSR Project
-Code Reference: https://github.com/XPixelGroup/BasicSR
-'''
 import math
 from torch.optim.lr_scheduler import _LRScheduler
 
