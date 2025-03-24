@@ -129,7 +129,7 @@ If you find our work helpful for your research, please cite our paper.
 
 ## Acknowledgement
 
-This project is based on [NLOS-OT](https://github.com/ruixv/NLOS-OT), [DiffBIR](https://github.com/JaehaKim97/SR4IR) and [DiffBIR](https://github.com/XPixelGroup/DiffBIR). Thanks for their awesome work.
+This project is based on [NLOS-OT](https://github.com/ruixv/NLOS-OT), [SR4IR](https://github.com/JaehaKim97/SR4IR) and [DiffBIR](https://github.com/XPixelGroup/DiffBIR). Thanks for their awesome work.
 
 ## Contact
 If you have any questions, please email `eewy@mail.ustc.edu.cn`.
