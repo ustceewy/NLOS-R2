@@ -15,8 +15,8 @@ In this repository, we release the code in Pytorch as well as the large-scale mu
 
 You can download the dataset through the link below.
 
-> link: https://pan.baidu.com/s/1INXzut7mu79NkpRcD1s-bw  
-> password: 16fe 
+> link: https://pan.baidu.com/s/1nJCdYk56-zuVRTSXmefTnQ  
+> password: nsv7
 
 2. Organize the files structure of the dataset.
 
@@ -119,8 +119,8 @@ CUDA_VISIBLE_DEVICES=0 python src/main.py --opt options/cls/NLOS-R2.yml
 
 You can download the pre-trained weights through the link below, and it should be located as `experiments/cls/NLOS-R2/*`.
 
-> link: https://pan.baidu.com/s/1BOfhhfsuZDznMmf00Y0IyA  
-> password: wa5f 
+> link: https://pan.baidu.com/s/1rC6JJab6YeJCT7K1svSuxQ  
+> password: wnnt 
 
 The testing command is below:
 
