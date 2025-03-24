@@ -1,7 +1,3 @@
-'''
-BasicSR Project
-Code Reference: https://github.com/XPixelGroup/BasicSR
-'''
 import os
 import torch
 import torch.distributed as dist
