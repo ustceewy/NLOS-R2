@@ -6,7 +6,7 @@ In this repository, we release the code in Pytorch as well as the large-scale mu
 
 <br>
 <p align="center">
-<img src="assets/NLOS-R2.png" width="90%"/>
+<img src="pic/NLOS-R2.png" width="90%"/>
 </p>
 
 ## Dataset Preparation
