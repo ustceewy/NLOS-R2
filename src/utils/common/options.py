@@ -1,6 +1,3 @@
-"""BasicSR Projects
-Code Reference: https://github.com/XPixelGroup/BasicSR
-"""
 import os
 import yaml
 import random
