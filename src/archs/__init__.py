@@ -1,5 +1,6 @@
 from importlib import import_module
 
+
 def build_network(opt_network, logger, task='common', tag=None):
     opt_network = opt_network.copy()
     arch_name = opt_network.pop('name')
