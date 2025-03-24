@@ -6,14 +6,14 @@ In this repository, we release the code in Pytorch as well as the large-scale mu
 
 ## Dataset Preparation
 
-1. Download dataset
+1. Download dataset.
 
 You can download the dataset through the link below.
 
 > link: https://pan.baidu.com/s/1INXzut7mu79NkpRcD1s-bw  
 > password: 16fe 
 
-2. Organize the files structure of the dataset
+2. Organize the files structure of the dataset.
 
 We recommend organizing the dataset according to the following structure:
 
@@ -80,7 +80,7 @@ We recommend organizing the dataset according to the following structure:
 
 ## Installation
 
-1. Make a clone of this repo.
+1. Make a clone of this repository.
 
 ```
 git clone https://github.com/ustceewy/NLOS-R2.git
