@@ -1,7 +1,3 @@
-'''
-Torchvision
-Code Reference: https://github.com/pytorch/vision/tree/main/references
-'''
 import torch
 
 
