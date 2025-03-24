@@ -13,7 +13,6 @@ def parse_options():
     parser = argparse.ArgumentParser()
     parser.add_argument('--opt', type=str, required=True, help='Path to option YAML file.')
     parser.add_argument('--test_only', action='store_true')
-    parser.add_argument('--visualize', action='store_true')
     args = parser.parse_args()
 
     # parse yml to dict
