@@ -4,6 +4,7 @@ This repository is an official implementation of the paper **"NLOS-R2: Alternate
 
 In this repository, we release the code in Pytorch as well as the large-scale multi-class passive NLOS dataset.
 
+<br>
 <p align="center">
 <img src="assets/NLOS-R2.png" width="90%"/>
 </p>
