@@ -6,8 +6,6 @@ from archs import build_network
 from utils.cls import MetricLogger, calculate_accuracy
 from utils.common import save_on_master, quantize, reduce_across_processes, calculate_psnr_batch, calculate_lpips_batch
 from .base_model import BaseModel
-from skimage.metrics import structural_similarity as compare_ssim
-from skimage.metrics import peak_signal_noise_ratio as compare_psnr
 
 
 def make_model(opt):
