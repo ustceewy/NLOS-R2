@@ -220,41 +220,17 @@ class SEfeatureClassificationModel(BaseModel):
         metric_logger = MetricLogger(delimiter="  ")
         header = "Test: "
 
-        account = 0
-        avg_psnr_offical, avg_ssim_offical = 0.0, 0.0
         num_processed_samples = 0
         for i, (img_hr, img_lr, label) in enumerate(metric_logger.log_every(data_loader_test, self.opt['print_freq'], self.text_logger, header)):
             img_hr, img_lr, label = img_hr.to(self.device), img_lr.to(self.device), label.to(self.device)
 
             # super resolution
             img_sr = self.net_sr(img_lr)  # torch.Size([batch_size, 3, 256, 256])
-
-            # save
-            # from PIL import Image
-            # for idx, single_img_sr in enumerate(img_sr):
-            #     img = single_img_sr.permute(1, 2, 0) * 255  # torch.Size([3, 256, 256]) -> torch.Size([256, 256, 3])
-            #     img = img.clamp(0, 255).to(torch.uint8).cpu().numpy()  # (256, 256, 3), 取值范围(0, 255)
-            #     img = Image.fromarray(img)
-            #     save_path = os.path.join('/share2/data/wangyi/paper/result/ours', f'{i}_{idx}.png')
-            #     img.save(save_path)
             
             # image classification
             img_1 = self.transform_eval(img_sr)
             img_2 = self.transform_eval(img_lr)
             pred_sr = self.net_cls(img_1, img_2)
-
-            # pred = pred_sr.argmax(dim=1)
-            # class_names = ['airplane', 'apple', 'ball', 'bear', 'bed', 'bench', 'bird', 'burger', 'butterfly', 'car',
-            #                'cat', 'clock', 'cup', 'dog', 'elephant', 'fox', 'frog', 'horse', 'house', 'koala',
-            #                'ladybug', 'monkey', 'motorcycle', 'mushroom', 'panda', 'pen', 'phone', 'piano', 'pizza', 'rabbit',
-            #                'shark', 'ship', 'shoe', 'snail', 'snake', 'spaghetti', 'swan', 'table', 'tie', 'tiger',
-            #                'train', 'turtle']
-            # pred = [class_names[idx] for idx in pred]
-            # true = [class_names[idx.item()] for idx in label]
-            # correct = ['True' if pred[i] == true[i] else 'False' for i in range(len(pred))]
-            # with open('/share2/data/wangyi/paper/result/ours/pred.txt', 'a') as f:
-            #     for i in range(len(pred)):
-            #         f.write(f"{pred[i]} {correct[i]}\n")
 
             # evaluation on validation batch
             batch_size = img_hr.shape[0]
@@ -266,18 +242,7 @@ class SEfeatureClassificationModel(BaseModel):
             acc1_sr, acc5_sr = calculate_accuracy(pred_sr, label, topk=(1, 5))
             metric_logger.meters["acc1_sr"].update(acc1_sr.item(), n=batch_size)
             metric_logger.meters["acc5_sr"].update(acc5_sr.item(), n=batch_size)
-            num_processed_samples += batch_size            
-
-            if self.opt['test'].get('calculate_psnr_ssim', False):
-                batch_size = img_hr.shape[0]
-                for i in range(batch_size):
-                    account += 1
-                    single_img_hr = (img_hr[i] * 255).clamp(0, 255).to(torch.uint8).cpu().numpy()
-                    single_img_sr = (img_sr[i] * 255).clamp(0, 255).to(torch.uint8).cpu().numpy()
-                    psnr_offical = compare_psnr(single_img_hr, single_img_sr, data_range=255)
-                    avg_psnr_offical += psnr_offical
-                    ssim_offical = compare_ssim(single_img_hr, single_img_sr, data_range=255, channel_axis=0)
-                    avg_ssim_offical += ssim_offical
+            num_processed_samples += batch_size
 
         # gather the stats from all processes
         num_processed_samples = reduce_across_processes(num_processed_samples)
@@ -303,10 +268,6 @@ class SEfeatureClassificationModel(BaseModel):
         metric_summary = self.add_metric(metric_summary, 'ACC_SR@5', metric_logger.acc5_sr.global_avg, epoch)
         self.text_logger.write(metric_summary)
 
-        if self.opt['test'].get('calculate_psnr_ssim', False):
-            avg_psnr_offical /= account
-            avg_ssim_offical /= account
-            print(f'Account = {account}, PSNR = {avg_psnr_offical}, SSIM = {avg_ssim_offical}')
         return
 
     def save(self, epoch):            
