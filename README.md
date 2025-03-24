@@ -1,6 +1,6 @@
 # NLOS-R2
 
-This repository is an official implementation of the paper **"NLOS-R^2 Alternate Reconstruction and Recognition for Non-Line-of-Sight Understanding** (ICME 2025)".
+This repository is an official implementation of the paper **"NLOS-R2: Alternate Reconstruction and Recognition for Non-Line-of-Sight Understanding** (ICME 2025)".
 
 In this repository, we release the code in Pytorch as well as the large-scale multi-class passive NLOS dataset.
 
@@ -10,7 +10,7 @@ In this repository, we release the code in Pytorch as well as the large-scale mu
 
 You can download the dataset through the link below.
 
-> link: https://pan.baidu.com/s/1INXzut7mu79NkpRcD1s-bw
+> link: https://pan.baidu.com/s/1INXzut7mu79NkpRcD1s-bw  
 > password: 16fe 
 
 If the link fails, please feel free to contact us.
@@ -103,7 +103,7 @@ We initialize the reconstruction and recognition module from the weights trained
 
 You can download the pre-trained weight of the reconstruction module through the link below, and it should be located as `experiments/*`.
 
-> https://pan.baidu.com/s/176fARg2ySYtDgX2vQOeRbA?pwd=vfif
+> https://pan.baidu.com/s/176fARg2ySYtDgX2vQOeRbA?pwd=vfif  
 > password: vfif
 
 The Traning command is below:
@@ -116,7 +116,7 @@ CUDA_VISIBLE_DEVICES=0 python src/main.py --opt options/cls/NLOS-R2.yml
 
 You can download the pre-trained weights through the link below, and it should be located as `experiments/cls/NLOS-R2/*`.
 
-> link: https://pan.baidu.com/s/1BOfhhfsuZDznMmf00Y0IyA
+> link: https://pan.baidu.com/s/1BOfhhfsuZDznMmf00Y0IyA  
 > password: wa5f 
 
 The testing command is below:
@@ -124,3 +124,14 @@ The testing command is below:
 ```
 CUDA_VISIBLE_DEVICES=0 python src/main.py --opt options/cls/NLOS-R2.yml --test_only
 ```
+
+## Citation
+
+If you find our work helpful for your research, please cite our paper.
+
+## Acknowledgement
+
+This project is based on [NLOS-OT](https://github.com/ruixv/NLOS-OT), [DiffBIR](https://github.com/JaehaKim97/SR4IR) and [DiffBIR](https://github.com/XPixelGroup/DiffBIR). Thanks for their awesome work.
+
+## Contact
+If you have any questions, please email `eewy@mail.ustc.edu.cn`.
