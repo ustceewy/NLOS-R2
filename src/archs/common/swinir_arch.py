@@ -10,6 +10,10 @@ from itertools import repeat
 import torch.utils.checkpoint as checkpoint
 
 
+def build_network(**kwargs):
+    return SwinIR(**kwargs)
+
+
 def _ntuple(n):
     def parse(x):
         if isinstance(x, collections.abc.Iterable):
@@ -109,10 +113,6 @@ class DropPath(nn.Module):
 
     def forward(self, x):
         return drop_path(x, self.drop_prob, self.training)
-
-
-def build_network(**kwargs):
-    return SwinIR(**kwargs)
 
 
 class Mlp(nn.Module):
