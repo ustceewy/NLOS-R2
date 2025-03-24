@@ -9,5 +9,5 @@ You can download the pre-trained weight of the reconstruction module through the
 
 You can download the pre-trained weights through the link below, and they should be located as `experiments/cls/NLOS-R2/*`.
 
-> link: https://pan.baidu.com/s/1BOfhhfsuZDznMmf00Y0IyA  
-> password: wa5f
+> link: https://pan.baidu.com/s/1rC6JJab6YeJCT7K1svSuxQ  
+> password: wnnt
