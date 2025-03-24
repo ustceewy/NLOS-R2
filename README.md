@@ -90,8 +90,8 @@ cd NLOS-R2
 2. Set the environment.
 
 ```
-conda create -n SR4IR python=3.8.18
-conda activate SR4IR
+conda create -n NLOS-R2 python=3.8.18
+conda activate NLOS-R2
 pip install -r requirements.txt
 ```
 
