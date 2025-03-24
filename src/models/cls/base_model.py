@@ -253,9 +253,9 @@ class BaseModel():
         if self.opt.get('test_only'):
             param_key = None
             if tag == 'net_sr':
-                load_path = os.path.join(self.exp_dir, 'models/net_sr_030.pth')
+                load_path = os.path.join(self.exp_dir, 'models/net_sr_020.pth')
             if tag == 'net_cls':
-                load_path = os.path.join(self.exp_dir, 'models/net_cls_030.pth')
+                load_path = os.path.join(self.exp_dir, 'models/net_cls_020.pth')
 
         if load_path is None:
             return
