@@ -246,9 +246,6 @@ class WindowAttention(nn.Module):
         x = self.proj_drop(x)
         return x
 
-    def extra_repr(self) -> str:
-        return f'dim={self.dim}, window_size={self.window_size}, num_heads={self.num_heads}'
-
 
 class SwinTransformerBlock(nn.Module):
     r""" Swin Transformer Block.
@@ -381,10 +378,6 @@ class SwinTransformerBlock(nn.Module):
 
         return x
 
-    def extra_repr(self) -> str:
-        return (f'dim={self.dim}, input_resolution={self.input_resolution}, num_heads={self.num_heads}, '
-                f'window_size={self.window_size}, shift_size={self.shift_size}, mlp_ratio={self.mlp_ratio}')
-
 
 class BasicLayer(nn.Module):
     """ A basic Swin Transformer layer for one stage.
@@ -458,9 +451,6 @@ class BasicLayer(nn.Module):
         if self.downsample is not None:
             x = self.downsample(x)
         return x
-
-    def extra_repr(self) -> str:
-        return f'dim={self.dim}, input_resolution={self.input_resolution}, depth={self.depth}'
 
 
 class RSTB(nn.Module):
