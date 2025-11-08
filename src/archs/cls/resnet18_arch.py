@@ -236,7 +236,7 @@ class ResNet(nn.Module):
 
         return nn.Sequential(*layers)
 
-    def forward(self, x: Tensor, return_feats=False, return_ot=False) -> Tensor:
+    def forward(self, x: Tensor, return_feats=False) -> Tensor:
         feats = {}
         
         x = self.conv1(x)
@@ -275,13 +275,10 @@ class ResNet(nn.Module):
         
         x = self.avgpool(x)
         x = torch.flatten(x, 1)
-        ot = x
         x = self.fc(x)
 
         if return_feats:    
             return x, feats
-        elif return_ot:
-            return x, ot
         else:
             return x
 
