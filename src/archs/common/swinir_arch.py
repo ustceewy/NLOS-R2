@@ -5,8 +5,8 @@ import torch.nn as nn
 
 
 # from timm.layers import to_2tuple, trunc_normal_, DropPath
-import collections.abc
 from itertools import repeat
+import collections.abc
 import torch.utils.checkpoint as checkpoint
 
 
@@ -188,8 +188,7 @@ class WindowAttention(nn.Module):
         self.scale = qk_scale or head_dim**-0.5
 
         # define a parameter table of relative position bias
-        self.relative_position_bias_table = nn.Parameter(
-            torch.zeros((2 * window_size[0] - 1) * (2 * window_size[1] - 1), num_heads))
+        self.relative_position_bias_table = nn.Parameter(torch.zeros((2 * window_size[0] - 1) * (2 * window_size[1] - 1), num_heads))
 
         # get pair-wise relative position index for each token inside the window
         coords_h = torch.arange(self.window_size[0])
@@ -207,7 +206,6 @@ class WindowAttention(nn.Module):
         self.qkv = nn.Linear(dim, dim * 3, bias=qkv_bias)
         self.attn_drop = nn.Dropout(attn_drop)
         self.proj = nn.Linear(dim, dim)
-
         self.proj_drop = nn.Dropout(proj_drop)
 
         trunc_normal_(self.relative_position_bias_table, std=.02)
@@ -222,12 +220,10 @@ class WindowAttention(nn.Module):
         b_, n, c = x.shape
         qkv = self.qkv(x).reshape(b_, n, 3, self.num_heads, c // self.num_heads).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
-
         q = q * self.scale
         attn = (q @ k.transpose(-2, -1))
 
-        relative_position_bias = self.relative_position_bias_table[self.relative_position_index.view(-1)].view(
-            self.window_size[0] * self.window_size[1], self.window_size[0] * self.window_size[1], -1)
+        relative_position_bias = self.relative_position_bias_table[self.relative_position_index.view(-1)].view(self.window_size[0] * self.window_size[1], self.window_size[0] * self.window_size[1], -1)
         relative_position_bias = relative_position_bias.permute(2, 0, 1).contiguous()
         attn = attn + relative_position_bias.unsqueeze(0)
 
@@ -238,7 +234,6 @@ class WindowAttention(nn.Module):
             attn = self.softmax(attn)
         else:
             attn = self.softmax(attn)
-
         attn = self.attn_drop(attn)
 
         x = (attn @ v).transpose(1, 2).reshape(b_, n, c)
@@ -330,11 +325,10 @@ class SwinTransformerBlock(nn.Module):
                 img_mask[:, h, w, :] = cnt
                 cnt += 1
 
-        mask_windows = window_partition(img_mask, self.window_size)  # nw, window_size, window_size, 1
+        mask_windows = window_partition(img_mask, self.window_size)
         mask_windows = mask_windows.view(-1, self.window_size * self.window_size)
         attn_mask = mask_windows.unsqueeze(1) - mask_windows.unsqueeze(2)
         attn_mask = attn_mask.masked_fill(attn_mask != 0, float(-100.0)).masked_fill(attn_mask == 0, float(0.0))
-
         return attn_mask
 
     def forward(self, x, x_size):
@@ -375,7 +369,6 @@ class SwinTransformerBlock(nn.Module):
         # FFN
         x = shortcut + self.drop_path(x)
         x = x + self.drop_path(self.mlp(self.norm2(x)))
-
         return x
 
 
@@ -744,7 +737,7 @@ class SwinIR(nn.Module):
         self.pos_drop = nn.Dropout(p=drop_rate)
 
         # stochastic depth
-        dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]  # stochastic depth decay rule
+        dpr = [x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
 
         # build Residual Swin Transformer blocks (RSTB)
         self.layers = nn.ModuleList()
@@ -760,7 +753,7 @@ class SwinIR(nn.Module):
                 qk_scale=qk_scale,
                 drop=drop_rate,
                 attn_drop=attn_drop_rate,
-                drop_path=dpr[sum(depths[:i_layer]):sum(depths[:i_layer + 1])],  # no impact on SR results
+                drop_path=dpr[sum(depths[:i_layer]):sum(depths[:i_layer + 1])],
                 norm_layer=norm_layer,
                 downsample=None,
                 use_checkpoint=use_checkpoint,
@@ -776,15 +769,18 @@ class SwinIR(nn.Module):
         elif resi_connection == '3conv':
             # to save parameters and memory
             self.conv_after_body = nn.Sequential(
-                nn.Conv2d(embed_dim, embed_dim // 4, 3, 1, 1), nn.LeakyReLU(negative_slope=0.2, inplace=True),
-                nn.Conv2d(embed_dim // 4, embed_dim // 4, 1, 1, 0), nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                nn.Conv2d(embed_dim, embed_dim // 4, 3, 1, 1),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                nn.Conv2d(embed_dim // 4, embed_dim // 4, 1, 1, 0),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
                 nn.Conv2d(embed_dim // 4, embed_dim, 3, 1, 1))
 
         # ------------------------- 3, high quality image reconstruction ------------------------- #
         if self.upsampler == 'pixelshuffle':
             # for classical SR
             self.conv_before_upsample = nn.Sequential(
-                nn.Conv2d(embed_dim, num_feat, 3, 1, 1), nn.LeakyReLU(inplace=True))
+                nn.Conv2d(embed_dim, num_feat, 3, 1, 1),
+                nn.LeakyReLU(inplace=True))
             self.upsample = Upsample(upscale, num_feat)
             self.conv_last = nn.Conv2d(num_feat, num_out_ch, 3, 1, 1)
         elif self.upsampler == 'pixelshuffledirect':
@@ -794,7 +790,8 @@ class SwinIR(nn.Module):
         elif self.upsampler == 'nearest+conv':
             # for real-world SR (less artifacts)
             self.conv_before_upsample = nn.Sequential(
-                nn.Conv2d(embed_dim, num_feat, 3, 1, 1), nn.LeakyReLU(inplace=True))
+                nn.Conv2d(embed_dim, num_feat, 3, 1, 1),
+                nn.LeakyReLU(inplace=True))
             self.conv_up1 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
             self.conv_up2 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
             self.conv_up3 = nn.Conv2d(num_feat, num_feat, 3, 1, 1)
@@ -816,14 +813,6 @@ class SwinIR(nn.Module):
             nn.init.constant_(m.bias, 0)
             nn.init.constant_(m.weight, 1.0)
 
-    @torch.jit.ignore
-    def no_weight_decay(self):
-        return {'absolute_pos_embed'}
-
-    @torch.jit.ignore
-    def no_weight_decay_keywords(self):
-        return {'relative_position_bias_table'}
-
     def forward_features(self, x):
         x_size = (x.shape[2], x.shape[3])
         x = self.patch_embed(x)
@@ -834,9 +823,8 @@ class SwinIR(nn.Module):
         for idx, layer in enumerate(self.layers):
             x = layer(x, x_size)
         
-        x = self.norm(x)  # b seq_len c
+        x = self.norm(x)
         x = self.patch_unembed(x, x_size)
-
         return x
 
     def forward(self, x):
@@ -879,5 +867,4 @@ class SwinIR(nn.Module):
             x = x + self.conv_last(res)
 
         x = x / self.img_range + self.mean
-
         return x[:,:,:h*self.upscale,:w*self.upscale]
